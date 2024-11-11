@@ -17,15 +17,6 @@ Credit https://www.youtube.com/@projectswithdigambar
 - `speech_recognition` ve `pyttsx3` gibi doğal dil işleme kütüphaneleri
 - YouTube'daki öğreticinin yönlendirmeleri doğrultusunda ek kütüphaneler
 
-### Kurulum
-1. Gerekli Python kütüphanelerini yükleyin:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Projeyi çalıştırmak için ana dosyayı başlatın:
-   ```bash
-   python main.py
-   ```
 
 ### Nasıl Kullanılır
 1. Sanal asistanı başlattıktan sonra, mikrofona komutlar vererek asistanın yanıtlarını dinleyebilirsiniz.
@@ -51,15 +42,6 @@ Credit https://www.youtube.com/@projectswithdigambar
 - Natural language processing libraries like `speech_recognition` and `pyttsx3`
 - Additional libraries as directed in the YouTube tutorial
 
-### Installation
-1. Install the necessary Python libraries:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. Start the main file to run the project:
-   ```bash
-   python main.py
-   ```
 
 ### Usage
 1. After starting the virtual assistant, you can give commands to the microphone and listen to the assistant's responses.
