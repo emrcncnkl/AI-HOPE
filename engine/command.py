@@ -50,8 +50,11 @@ def takecommand():
 
     try:
         print('hmm...')
+
         query = r.recognize_google(audio, language='tr-TR,en-US')
         print(f'Kullanıcı Dedi ki: {query}')
+        speak(query)
+        time.sleep(2)
 
     except Exception as e:
         print("Anlaşılamadı, lütfen tekrar deneyin.")
