@@ -13,7 +13,7 @@ def play_sound_thread():
 # Mikrofon sesini çalacak fonksiyon
 @eel.expose
 def play_mic_sound():
-    playsound(r"C:\Users\C V E X\Desktop\AI ASSISTANT\www\sounds\mikrofon.mp3")
+    playsound(r"C:\Users\C V E X\Desktop\AI-HOPE\www\sounds\mikrofon.mp3")
 
 # Rastgele asistan mesajları döndüren fonksiyon
 @eel.expose

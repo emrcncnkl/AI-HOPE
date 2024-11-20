@@ -38,28 +38,40 @@ def takecommand():
     r = sr.Recognizer()
 
     with sr.Microphone() as source:
-        print('Dinliyorum....')
+        # JavaScript'e "Dinliyorum..." mesajı gönder
+        eel.DisplayMessage("Dinliyorum...")  
+
+        print('Dinliyorum...')
         r.pause_threshold = 0.8
-        r.adjust_for_ambient_noise(source, duration=0.3)  # Ortam gürültüsü için süreyi daha da kısalt
+        r.adjust_for_ambient_noise(source, duration=0.3)  # Ortam gürültüsünü ayarlama
 
         try:
             audio = r.listen(source, timeout=3, phrase_time_limit=5)
         except sr.WaitTimeoutError:
+            # Zaman aşımı durumunu JavaScript'e bildirin
+            eel.DisplayMessage("Mikrofon zaman aşımına uğradı.")
             print("Mikrofon zaman aşımına uğradı.")
             return ''
 
     try:
+        # Konuşma algılanıyor ve işleniyor
+        eel.DisplayMessage("Konuşma algılanıyor...")
         print('hmm...')
-
         query = r.recognize_google(audio, language='tr-TR,en-US')
         print(f'Kullanıcı Dedi ki: {query}')
-        speak(query)
+        eel.DisplayMessage(f"Kullanıcı Dedi ki: {query}")
         time.sleep(2)
 
     except Exception as e:
+        # Hata durumunu JavaScript'e bildirin
+        eel.DisplayMessage("Anlaşılamadı, lütfen tekrar deneyin.")
         print("Anlaşılamadı, lütfen tekrar deneyin.")
         return ''
+    
     return query.lower()
+
+def activate_listening():
+    eel.DisplayMessage("useReadyMessages")  # JavaScript'teki özel durumu teti
 
 @eel.expose
 def allCommands():
@@ -77,6 +89,11 @@ def allCommands():
     if "aç" in query:
         from engine.features import openCommand
         openCommand(query)
+    elif "youtube'da":
+        from engine.features import PlayYoutube
+        PlayYoutube(query)
     else:
         print("açılamadı.")
+
+    eel.ShowHood()
  
