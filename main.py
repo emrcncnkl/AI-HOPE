@@ -2,18 +2,13 @@ import os
 import eel
 import threading
 import random
-from playsound import playsound
 from engine.features import playasssistantSound  # Bu fonksiyonun doğru çalıştığını varsayıyorum
 from engine.command import *
+import webbrowser
 # `playasssistantSound` fonksiyonunu bir iş parçacığında çalıştırmak için yeni bir fonksiyon
 def play_sound_thread():
     playasssistantSound()
 
-
-# Mikrofon sesini çalacak fonksiyon
-@eel.expose
-def play_mic_sound():
-    playsound(r"C:\Users\C V E X\Desktop\AI-HOPE\www\sounds\mikrofon.mp3")
 
 # Rastgele asistan mesajları döndüren fonksiyon
 @eel.expose

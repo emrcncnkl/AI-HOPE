@@ -7,12 +7,7 @@ import eel
 import threading
 from playsound import playsound
 import time
-
 pygame.mixer.init()
-
-# Mikrofon sesini iş parçacığı içinde çalacak şekilde ayarla
-def play_mic_sound():
-    threading.Thread(target=lambda: playsound(r"C:\\Users\\C V E X\\Desktop\\AI ASSISTANT\\www\\sounds\\mikrofon.mp3")).start()
 
 # Kullanıcı metnini seslendiren fonksiyon
 def speak(text):
@@ -75,25 +70,22 @@ def activate_listening():
 
 @eel.expose
 def allCommands():
-    # Mikrofon sesi yalnızca bir kez oynatılacak şekilde düzenlendi
-    if not hasattr(allCommands, 'mic_sound_played'):
-        play_mic_sound()  # Mikrofon sesi oynatılır
-        allCommands.mic_sound_played = True
+    query = takecommand()  # Kullanıcıdan komut al
+    if not query:  # Eğer komut boşsa, işlem yapılmasın
+        print("Komut alınamadı.")
+        eel.DisplayMessage("Lütfen bir şey söyleyin.")
+        return
 
-    query = takecommand()
-    print(query)
-
-    if query:
-        speak(query)  # Kullanıcının dediğini seslendir
+    print(f"Gelen komut: {query}")
 
     if "aç" in query:
         from engine.features import openCommand
         openCommand(query)
-    elif "youtube'da":
+    elif "youtube'da" in query:
         from engine.features import PlayYoutube
         PlayYoutube(query)
     else:
-        print("açılamadı.")
+        eel.DisplayMessage("Bu komutu anlayamadım. Lütfen tekrar deneyin.")
 
     eel.ShowHood()
  

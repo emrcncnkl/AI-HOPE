@@ -13,19 +13,18 @@ $(document).ready(function () {
     eel.expose(DisplayMessage);
     function DisplayMessage(message) {
         if (message === "useReadyMessages") {
-            // Hazır mesajlardan sıradaki mesajı göster
+            // Hazır mesajları döngüsel olarak göster
             const selectedMessage = readyMessages[currentIndex];
             $(".siri-message").text(selectedMessage);
             $(".siri-message").textillate('start');
-
-            // Sonraki mesaj için sırayı güncelle
-            currentIndex = (currentIndex + 1) % readyMessages.length; // Döngüsel gösterim
+            currentIndex = (currentIndex + 1) % readyMessages.length;
         } else {
-            // Python'dan gelen mesajı doğrudan göster
-            $(".siri-message").text(message);
+            // Gelen mesajı doğrudan göster
+            $(".siri-message").text(message || "Bir şey söylemediniz.");
             $(".siri-message").textillate('start');
         }
     }
+    
 
     // Mikrofon butonuna tıklama olayını dinleyin
     $("#MicBtn").on("click", function () {
