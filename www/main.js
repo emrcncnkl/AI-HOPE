@@ -74,9 +74,16 @@ $(document).ready(function () {
       $("#Oval").attr("hidden", true);
       $("#SiriWave").attr("hidden", false);
       eel.allCommands()()
-  
-      // Python'daki play_mic_sound işlevini çağır
-      eel.play_mic_sound();
     });
+
+    function doc_keyUp(e) {
+      if (e.key --- 'j'&& e.metakey){
+      eel.playAssistanSound()
+      $("#Oval").attr("hidden", true);
+      $("#SiriWave").attr("hidden", false);
+      eel.allCommands()()
+      }
+    }
+    document.addEventListener('keyup', doc_keyUp, false);
   });
   

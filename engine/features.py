@@ -6,7 +6,13 @@ from engine.command import speak
 from engine.config import ASSISTANT_NAME
 import pywhatkit as kit
 import sqlite3  # SQLite modülünü içe aktar
-import webbrowser  # Web tarayıcı kontrol modülünü içe aktar
+import webbrowser
+import struct
+import time
+import pvporcupine
+import pyaudio
+import pyautogui as autogui
+from engine.helper import extract_yt_term  # Web tarayıcı kontrol modülünü içe aktar
 
 # Veritabanına bağlanma ve cursor tanımlama
 conn = sqlite3.connect("hope.db")  # hope.db SQLite veritabanı dosyanız
@@ -73,14 +79,41 @@ def PlayYoutube(query):
     kit.playonyt(search_term)
 
 
-def extract_yt_term(command):
-    # Youtube ile ilgili herhangi bir arama terimini yakalamak için düzenli ifade
-    pattern = r'(?:youtube.*?)([\w\s]+)'  # Türkçe ve İngilizce destekler
-    match = re.search(pattern, command, re.IGNORECASE)
-    return match.group(1).strip() if match else None  # None döner, varsayılan içerik kullanmaz
-    
-    # re.search kullanarak komut içinde eşleşme ara
-    match = re.search(pattern, command, re.IGNORECASE)
-    
-    # Eğer bir eşleşme bulunursa, yakalanan şarkı adını döndür; aksi takdirde None döndür
-    return match.group(1) if match else None 
+
+def hotword():
+    porcupine=None
+    paud=None
+    audio_stream=None
+    try:
+       
+        # pre trained keywords    
+        porcupine=pvporcupine.create(keywords=["hope","alexa"]) 
+        paud=pyaudio.PyAudio()
+        audio_stream=paud.open(rate=porcupine.sample_rate,channels=1,format=pyaudio.paInt16,input=True,frames_per_buffer=porcupine.frame_length)
+        
+        # loop for streaming
+        while True:
+            keyword=audio_stream.read(porcupine.frame_length)
+            keyword=struct.unpack_from("h"*porcupine.frame_length,keyword)
+
+            # processing keyword comes from mic 
+            keyword_index=porcupine.process(keyword)
+
+            # checking first keyword detetcted for not
+            if keyword_index>=0:
+                print("anahtar kelime algılandı")
+
+                # pressing shorcut key win+j
+                import pyautogui as autogui
+                autogui.keyDown("win")
+                autogui.press("j")
+                time.sleep(2)
+                autogui.keyUp("win")
+                
+    except:
+        if porcupine is not None:
+            porcupine.delete()
+        if audio_stream is not None:
+            audio_stream.close()
+        if paud is not None:
+            paud.terminate()

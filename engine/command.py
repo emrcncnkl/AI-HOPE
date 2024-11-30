@@ -70,22 +70,25 @@ def activate_listening():
 
 @eel.expose
 def allCommands():
-    query = takecommand()  # Kullanıcıdan komut al
-    if not query:  # Eğer komut boşsa, işlem yapılmasın
-        print("Komut alınamadı.")
-        eel.DisplayMessage("Lütfen bir şey söyleyin.")
-        return
+    try:
+        query = takecommand()  # Kullanıcıdan komut al
+        if not query:  # Eğer komut boşsa, işlem yapılmasın
+            print("Komut alınamadı.")
+            eel.DisplayMessage("Lütfen bir şey söyleyin.")
+            return
 
-    print(f"Gelen komut: {query}")
+        print(f"Gelen komut: {query}")
 
-    if "aç" in query:
-        from engine.features import openCommand
-        openCommand(query)
-    elif "youtube'da" in query:
-        from engine.features import PlayYoutube
-        PlayYoutube(query)
-    else:
-        eel.DisplayMessage("Bu komutu anlayamadım. Lütfen tekrar deneyin.")
+        if "aç" in query:
+            from engine.features import openCommand
+            openCommand(query)
+        elif "youtube'da" in query:
+            from engine.features import PlayYoutube
+            PlayYoutube(query)
+        else:
+            eel.DisplayMessage("Bu komutu anlayamadım. Lütfen tekrar deneyin.")
+    except:
+        print("Hata")
 
     eel.ShowHood()
  
