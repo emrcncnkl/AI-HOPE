@@ -77,6 +77,34 @@ body{
     }
 }
 
+/* Chat Box */
+.chat-canvas {
+  background-color: #191919;
+}
+
+.receiver_message {
+  padding: 8px;
+  border: 2px solid rgb(216, 228, 228);
+  border-radius: 0px 15px 15px 20px;
+  width: auto;
+  color: white;
+  background-color: #0dcaf014;
+}
+
+.sender_message {
+  padding: 8px;
+  border: 1px solid #bdc9eb;
+  border-radius: 15px 15px 0px 20px;
+  width: auto;
+  color: white;
+  background-color: #a6b9f0;
+}
+
+.width-size {
+  max-width: 80%;
+  width: auto;
+}
+
 /* Input Filed Start*/
 
 #TextInput {

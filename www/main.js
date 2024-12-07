@@ -26,15 +26,14 @@ $(document).ready(function () {
     speed: "0.150",
     autostar: true,
   });
-  
-  
+
   function ShowHood() {
     console.log("ShowHood fonksiyonu çağrıldı");
     // Burada gerekli işlemleri yapabilirsiniz
-}
+  }
 
-// Eel tarafına fonksiyonu expose etme
-eel.expose(ShowHood);
+  // Eel tarafına fonksiyonu expose etme
+  eel.expose(ShowHood);
 
   // Function to get a random prompt from Python and update Siri message
   function updateSiriMessage() {
@@ -84,7 +83,7 @@ eel.expose(ShowHood);
   $("#MicBtn").click(function () {
     $("#Oval").attr("hidden", true);
     $("#SiriWave").attr("hidden", false);
-    eel.allCommands()();
+    eel.allCommands(); // Fazladan parantez kaldırıldı
   });
 
   // Keyboard shortcut function
@@ -93,30 +92,29 @@ eel.expose(ShowHood);
       eel.playAssistanSound();
       $("#Oval").attr("hidden", true);
       $("#SiriWave").attr("hidden", false);
-      eel.allCommands()();
+      eel.allCommands(); // Fazladan parantez kaldırıldı
     }
   }
   document.addEventListener("keyup", doc_keyUp, false);
 
+  // to play assistant 
   function PlayAssistant(message) {
     if (message != "") {
-        console.log("Mesaj gönderiliyor: ", message);
-        eel.allCommands(message);  // .then() kısmını kaldırdım
-        $("#chatbox").val("");
-        $("#MicBtn").attr("hidden", false);
-        $("#SendBtn").attr("hidden", true);
+      console.log("Mesaj gönderiliyor: ", message);
+      eel.allCommands(message)
+        .then(function () {
+          console.log("allCommands başarıyla çağrıldı.");
+        })
+        .catch(function (error) {
+          console.error("allCommands çağrılırken hata oluştu: ", error);
+        });
+      $("#chatbox").val("");
+      $("#MicBtn").attr("hidden", false);
+      $("#SendBtn").attr("hidden", true);
     }
-}
-function ShowHood() {
-  console.log("ShowHood fonksiyonu çağrıldı");
-  // Buraya gerekli işlemleri ekleyin, örneğin bir div'i göstermek ya da animasyon başlatmak gibi.
-}
+  }
 
-eel.expose(ShowHood);
-
-
-
-  // toogle fucntion to hide and display mic and send button
+  // toogle function to hide and display mic and send button
   function ShowHideButton(message) {
     if (message.length == 0) {
       $("#MicBtn").attr("hidden", false);

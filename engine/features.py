@@ -13,7 +13,7 @@ import pvporcupine
 import pyaudio
 import pyautogui as autogui
 from engine.helper import extract_yt_term  # Web tarayıcı kontrol modülünü içe aktar
-
+from hugchat import hugchat
 # Veritabanına bağlanma ve cursor tanımlama
 conn = sqlite3.connect("hope.db")  # hope.db SQLite veritabanı dosyanız
 cursor = conn.cursor()  # Veritabanı cursor'ı
@@ -117,3 +117,12 @@ def hotword():
             audio_stream.close()
         if paud is not None:
             paud.terminate()
+def chatBot(query):
+    user_input = query.lower()
+    chatbot = hugchat.ChatBot(cookie_path="engine\\cookies.json")
+    id = chatbot.new_conversation()
+    chatbot.change_conversation(id)
+    response = chatbot.chat(user_input)
+    print(response)
+    speak(response)
+    return response
