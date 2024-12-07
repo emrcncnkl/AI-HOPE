@@ -1,89 +1,150 @@
 $(document).ready(function () {
-    $("body *").hide().fadeIn(2000);
-    $(".text").textillate({
-      loop: true,
-      sync: true,
-      in: {
-        effect: "fadeIn",
-        sync: true,
-      },
-      out: {
-        effect: "fadeOut",
-        sync: true,
-      },
-    });
-  
-    // Siri config
-    var siriWave = new SiriWave({
-      container: document.getElementById("siri-container"),
-      width: 800,
-      height: 200,
-      style: "ios9",
-      amplitude: "1",
-      speed: "0.150",
-      autostar: true,
-    });
-  
-     // Rastgele mesajı almak için Python fonksiyonunu çağır
-     function updateSiriMessage() {
-      eel.get_random_prompt()(function (prompt) {
-        $(".siri-message").fadeOut(5000, function () {
-          $(this).text(prompt).fadeIn(5000);
-        });
-      });
-    }
-  
-     // Rastgele mesajı almak ve ana sayfada göstermek için Python fonksiyonunu çağır
-     function updateAssistantMessage() {
-      eel.get_random_prompt()(function (prompt) {
-        $("#assistantMessage").fadeOut(500, function () {
-          $(this).text(prompt).fadeIn(500);
-        });
-      });
-    }
-  
-    // Sayfa ilk yüklendiğinde bir mesaj göster
-    updateAssistantMessage();
-  
-    // Belirli aralıklarla mesajları değiştir (örneğin, her 5 saniyede bir)
-    setInterval(updateAssistantMessage, 5000);
-  
-    // Sayfa ilk yüklendiğinde bir mesaj göster
-    updateSiriMessage();
-  
-    // Belirli aralıklarla mesajları değiştir (örneğin, her 5 saniyede bir)
-    setInterval(updateSiriMessage, 4000);
-    
-    
-    // Siri message animation
-    $(".siri-message").textillate({
-      loop: true,
-      sync: true,
-      in: {
-        effect: "fadeInUp",
-        sync: true,
-      },
-      out: {
-        effect: "fadeOutUp",
-        sync: true,
-      },
-    });
-  
-    // Mic button
-    $("#MicBtn").click(function (e) {
-      $("#Oval").attr("hidden", true);
-      $("#SiriWave").attr("hidden", false);
-      eel.allCommands()()
-    });
+  // Body element fade-in animation
+  $("body *").hide().fadeIn(2000);
 
-    function doc_keyUp(e) {
-      if (e.key --- 'j'&& e.metakey){
-      eel.playAssistanSound()
-      $("#Oval").attr("hidden", true);
-      $("#SiriWave").attr("hidden", false);
-      eel.allCommands()()
-      }
-    }
-    document.addEventListener('keyup', doc_keyUp, false);
+  // Text animation configuration
+  $(".text").textillate({
+    loop: true,
+    sync: true,
+    in: {
+      effect: "fadeIn",
+      sync: true,
+    },
+    out: {
+      effect: "fadeOut",
+      sync: true,
+    },
+  });
+
+  // Siri configuration
+  var siriWave = new SiriWave({
+    container: document.getElementById("siri-container"),
+    width: 800,
+    height: 200,
+    style: "ios9",
+    amplitude: "1",
+    speed: "0.150",
+    autostar: true,
   });
   
+  
+  function ShowHood() {
+    console.log("ShowHood fonksiyonu çağrıldı");
+    // Burada gerekli işlemleri yapabilirsiniz
+}
+
+// Eel tarafına fonksiyonu expose etme
+eel.expose(ShowHood);
+
+  // Function to get a random prompt from Python and update Siri message
+  function updateSiriMessage() {
+    eel.get_random_prompt()(function (prompt) {
+      $(".siri-message").fadeOut(5000, function () {
+        $(this).text(prompt).fadeIn(5000);
+      });
+    });
+  }
+
+  // Function to get a random prompt from Python and update assistant message
+  function updateAssistantMessage() {
+    eel.get_random_prompt()(function (prompt) {
+      $("#assistantMessage").fadeOut(500, function () {
+        $(this).text(prompt).fadeIn(500);
+      });
+    });
+  }
+
+  // Display assistant message on page load
+  updateAssistantMessage();
+
+  // Change assistant message at regular intervals (every 5 seconds)
+  setInterval(updateAssistantMessage, 5000);
+
+  // Display Siri message on page load
+  updateSiriMessage();
+
+  // Change Siri message at regular intervals (every 4 seconds)
+  setInterval(updateSiriMessage, 4000);
+
+  // Siri message animation
+  $(".siri-message").textillate({
+    loop: true,
+    sync: true,
+    in: {
+      effect: "fadeInUp",
+      sync: true,
+    },
+    out: {
+      effect: "fadeOutUp",
+      sync: true,
+    },
+  });
+
+  // Mic button click event
+  $("#MicBtn").click(function () {
+    $("#Oval").attr("hidden", true);
+    $("#SiriWave").attr("hidden", false);
+    eel.allCommands()();
+  });
+
+  // Keyboard shortcut function
+  function doc_keyUp(e) {
+    if (e.key === "j" && e.metaKey) {
+      eel.playAssistanSound();
+      $("#Oval").attr("hidden", true);
+      $("#SiriWave").attr("hidden", false);
+      eel.allCommands()();
+    }
+  }
+  document.addEventListener("keyup", doc_keyUp, false);
+
+  function PlayAssistant(message) {
+    if (message != "") {
+        console.log("Mesaj gönderiliyor: ", message);
+        eel.allCommands(message);  // .then() kısmını kaldırdım
+        $("#chatbox").val("");
+        $("#MicBtn").attr("hidden", false);
+        $("#SendBtn").attr("hidden", true);
+    }
+}
+function ShowHood() {
+  console.log("ShowHood fonksiyonu çağrıldı");
+  // Buraya gerekli işlemleri ekleyin, örneğin bir div'i göstermek ya da animasyon başlatmak gibi.
+}
+
+eel.expose(ShowHood);
+
+
+
+  // toogle fucntion to hide and display mic and send button
+  function ShowHideButton(message) {
+    if (message.length == 0) {
+      $("#MicBtn").attr("hidden", false);
+      $("#SendBtn").attr("hidden", true);
+    } else {
+      $("#MicBtn").attr("hidden", true);
+      $("#SendBtn").attr("hidden", false);
+    }
+  }
+
+  // key up event handler on text box
+  $("#chatbox").keyup(function () {
+    let message = $("#chatbox").val();
+    ShowHideButton(message);
+  });
+
+  // send button event handler
+  $("#SendBtn").click(function () {
+    let message = $("#chatbox").val();
+    PlayAssistant(message);
+  });
+
+  // enter press event handler on chat box
+  $("#chatbox").keypress(function (e) {
+    key = e.which;
+    if (key == 13) {
+      let message = $("#chatbox").val();
+      PlayAssistant(message);
+    }
+  });
+});

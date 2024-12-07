@@ -7,8 +7,26 @@ import eel
 import threading
 from playsound import playsound
 import time
+import requests
 pygame.mixer.init()
+def is_connected():
+    try:
+        requests.get("https://www.google.com", timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False
 
+def play_sound(text, filename="output.mp3"):
+    if is_connected():
+        try:
+            tts = gTTS(text=text, lang="tr")
+            tts.save(filename)
+            os.system(f"start {filename}")
+        except Exception as e:
+            print(f"Ses oynatma sırasında hata oluştu: {str(e)}")
+    else:
+        print("İnternet bağlantısı yok. Ses dosyası oluşturulamadı.")
+        
 # Kullanıcı metnini seslendiren fonksiyon
 def speak(text):
     def play_sound():
@@ -69,26 +87,52 @@ def activate_listening():
     eel.DisplayMessage("useReadyMessages")  # JavaScript'teki özel durumu teti
 
 @eel.expose
-def allCommands():
+def allCommands(message=1):
     try:
-        query = takecommand()  # Kullanıcıdan komut al
-        if not query:  # Eğer komut boşsa, işlem yapılmasın
+        # allCommands fonksiyonunun çağrıldığını kontrol etmek için terminal çıktısı
+        print("allCommands fonksiyonu çağrıldı")
+
+        # Gelen mesajın kaynağını kontrol ediyoruz: sesli veya chat
+        if message == 1:
+            query = takecommand()  # Kullanıcıdan sesli komut al
+            print(f"Sesli komut alındı: {query}")
+        else:
+            query = message  # Chat kısmından gelen mesajı al
+            print(f"Chat komutu alındı: {query}")
+
+        # Eğer komut boşsa işlem yapmamak için kontrol
+        if not query:
             print("Komut alınamadı.")
             eel.DisplayMessage("Lütfen bir şey söyleyin.")
             return
 
+        # Gelen komutu terminalde yazdırıyoruz
         print(f"Gelen komut: {query}")
 
+        # Komutları kontrol ediyoruz ve uygun işlemi çağırıyoruz
         if "aç" in query:
             from engine.features import openCommand
+            print("openCommand fonksiyonu çağrılıyor...")
             openCommand(query)
-        elif "youtube'da" in query:
+            print("openCommand başarıyla çalıştırıldı.")
+        elif "youtube'da" in query.lower():
+            print("YouTube komutu algılandı.")
             from engine.features import PlayYoutube
             PlayYoutube(query)
+            print("YouTube komutu başarıyla işlendi.")
         else:
+            # Komut tanınmadığında kullanıcıya bildirim gönder
             eel.DisplayMessage("Bu komutu anlayamadım. Lütfen tekrar deneyin.")
-    except:
-        print("Hata")
+
+    except Exception as e:
+        import traceback
+        error_message = traceback.format_exc()
+        # Hata ayrıntısını terminale yazdırıyoruz
+        print(f"Hata ayrıntısı: {error_message}")
+        eel.DisplayMessage("Bir hata oluştu, lütfen tekrar deneyin.")
+
+
+
 
     eel.ShowHood()
  
